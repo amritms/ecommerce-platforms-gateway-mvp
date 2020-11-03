@@ -17,7 +17,8 @@ class ProductController extends Controller
         try{
             $platforms = [
                 1 => 'shopify',
-                2 => 'woocommerce'
+                2 => 'woocommerce',
+                3 => 'dontexist'
             ];
 
             $store_id = Route::current()->parameter('id');
@@ -26,8 +27,6 @@ class ProductController extends Controller
 
             config(['custom.platform' =>  $platform_type]);
 
-            // @TODO: make sure platform exists.
-
             app()->register(PlatformGatewayServiceProvider::class);
             $products = PlatformGateway::products();
 
@@ -35,7 +34,7 @@ class ProductController extends Controller
         }catch (\Exception $exception){
             Log::error($exception->getMessage(), ['_trace' => $exception->getTraceAsString()]);
 
-            return response()->json(['error' => 'Sorry! Something went wrong'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json(['error' => $exception->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

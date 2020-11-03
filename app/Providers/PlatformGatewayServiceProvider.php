@@ -7,6 +7,7 @@ use App\Repositories\Shopify;
 use App\Repositories\WooCommerce;
 use Illuminate\Contracts\Support\DeferrableProvider;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
@@ -42,18 +43,17 @@ class PlatformGatewayServiceProvider extends ServiceProvider
      *
      * @param $platform_type
      * @return Shopify|WooCommerce
+     * @throws \Exception
      */
     private function resolveInvoice($platform_type)
     {
-        // @TODO replace switch with dynamic switching code
-        switch($platform_type) {
-            case 'shopify':
-                return new Shopify();
-                break;
-            case 'woocommerce':
-                return new WooCommerce();
-                break;
-        }
-    }
+        $class_name = ucfirst($platform_type);
+        $platformRepo = "App\\Repositories\\" . $class_name;
 
+        if( ! class_exists($platformRepo)){
+            throw new \Exception($platformRepo . ' Provider not found.');
+        }
+
+        return new $platformRepo;
+    }
 }
