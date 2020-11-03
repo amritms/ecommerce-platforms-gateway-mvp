@@ -6,7 +6,9 @@ This project is created on Laravel 6.
 
 ### Setup project:
 1. clone the repo.
- 1. run ```composer install``` to install the dependencies.
+1. run ```composer install``` to install the dependencies.
+1. create .env file from .env.example and update ```APP_URL``` eg: ```APP_URL=http://localhost:8000```
+1. run ```php artisan key:generate``` to generate key
 
 ### Run the project:
 ```php artisan serve```
